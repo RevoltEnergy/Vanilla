@@ -16,10 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class RequestToApi {
@@ -41,47 +39,48 @@ public class RequestToApi {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                Looper.prepare();
+                try {
+                    url = new URL(requeustQuery);
+                    bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+                    String line;
+                    line = bufferedReader.readLine();
+                    while (line !=null && !line.isEmpty()) {
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append(line).append(System.lineSeparator());
+                        line = bufferedReader.readLine();
+                    }
+                    bufferedReader.close();
+                    String response = stringBuilder.toString();
+                    if (!response.isEmpty()) {
+                        imageListJson = new JSONObject(response);
+                        jsonArray = imageListJson.getJSONArray("hits");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject imageJson = jsonArray.getJSONObject(i);
+                            Image image = new Image.Builder()
+                                    .setId(imageJson.getLong("id"))
+                                    .setPageURL(imageJson.getString("pageURL"))
+                                    .setType(getImageType(imageJson.getString("type")))
+                                    .setTags(imageJson.getString("tags"))
+                                    .setPreviewURL(imageJson.getString("previewURL"))
+                                    .setWebformatURL(imageJson.getString("webformatURL"))
+                                    .setUserImageURL(imageJson.getString("userImageURL"))
+                                    .setUser(imageJson.getString("user"))
+                                    .build();
+                            images.add(image);
+                        }
+                    }
 
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Looper.prepare();
                 final Handler handler = new Handler();
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            url = new URL(requeustQuery);
-                            bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-                            String line;
-                            line = bufferedReader.readLine();
-                            while (line !=null && !line.isEmpty()) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append(line).append(System.lineSeparator());
-                                line = bufferedReader.readLine();
-                            }
-                            bufferedReader.close();
-                            String response = stringBuilder.toString();
-                            if (!response.isEmpty()) {
-                                imageListJson = new JSONObject(response);
-                                jsonArray = imageListJson.getJSONArray("hits");
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject imageJson = jsonArray.getJSONObject(i);
-                                    Image image = new Image.Builder()
-                                            .setId(imageJson.getLong("id"))
-                                            .setPageURL(imageJson.getString("pageURL"))
-                                            .setType(getImageType(imageJson.getString("type")))
-                                            .setTags(imageJson.getString("tags"))
-                                            .setPreviewURL(imageJson.getString("previewURL"))
-                                            .setWebformatURL(imageJson.getString("webformatURL"))
-                                            .setUserImageURL(imageJson.getString("userImageURL"))
-                                            .setUser(imageJson.getString("user"))
-                                            .build();
-                                    images.add(image);
-                                }
-                            }
 
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                        // STOP SPINNER
                         handler.removeCallbacks(this);
                         Objects.requireNonNull(Looper.myLooper()).quit();
                     }

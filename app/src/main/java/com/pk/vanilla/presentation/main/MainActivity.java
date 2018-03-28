@@ -1,23 +1,40 @@
 package com.pk.vanilla.presentation.main;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.pk.vanilla.R;
 import com.pk.vanilla.domain.model.Image;
+import com.pk.vanilla.domain.service.DownloadCallback;
+import com.pk.vanilla.domain.service.DownloadType;
 import com.pk.vanilla.presentation.common.BaseActivity;
 import com.pk.vanilla.presentation.details.ImageDetailFragment;
+import com.pk.vanilla.presentation.network.NetworkFragment;
 import com.pk.vanilla.presentation.search.ImageAdapter;
 import com.pk.vanilla.presentation.search.ImageClickListener;
 import com.pk.vanilla.presentation.search.ImageSearchFragment;
 
-public class MainActivity extends BaseActivity implements MainMvp.View {
+import java.util.List;
+
+public class MainActivity extends BaseActivity implements MainMvp.View, DownloadCallback<List<Image>>, SearchView.OnQueryTextListener {
 
     private MainPresenter mainPresenter;
     private ImageAdapter imageAdapter;
+
+    // Keep a reference to the NetworkFragment, which owns the AsyncTask object
+    // that is used to execute network ops.
+    private NetworkFragment mNetworkFragment;
+
+    // Boolean telling us whether a download is in progress, so we don't trigger overlapping
+    // downloads with consecutive button clicks.
+    private boolean mDownloading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +42,76 @@ public class MainActivity extends BaseActivity implements MainMvp.View {
         setContentView(R.layout.activity_main);
         mainPresenter = new MainPresenter();
         mainPresenter.attachView(this);
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+        searchView.setIconified(false);
+        searchView.setQueryHint("Search images...");
         changeState(new ImageSearchFragment());
-        mainPresenter.getImageList("yellow flowers");
+        mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "https://pixabay.com/api/?key=8499934-51ca6dfffe38c79d79c24afc0&q=yellow+flowers&image_type=photo&pretty=true");
+//        mainPresenter.getImageList("yellow flowers");
+    }
 
-//        RecyclerView recyclerView = findViewById(R.id.search_recycler_view);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//
-//        imageAdapter = new ImageAdapter(mainPresenter.getFakeData(), this);
-//        recyclerView.setAdapter(imageAdapter);
+    private void startDownload() {
+        if (!mDownloading && mNetworkFragment != null) {
+            // Execute the async download.
+            mNetworkFragment.startDownload(this, DownloadType.IMAGE_JSON);
+            mDownloading = true;
+        }
+    }
+
+    @Override
+    public void updateFromDownload(List<Image> images) {
+        // Update your UI here based on result of download.
+        // changeState(new ImageSearchFragment(List of images));
+
+        System.out.println(images);
+    }
+
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
+    }
+
+    @Override
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+        switch (progressCode) {
+            // You can add UI behavior for progress updates here.
+            case Progress.ERROR:
+                // TODO
+                break;
+            case Progress.CONNECT_SUCCESS:
+                // TODO
+                break;
+            case Progress.GET_INPUT_STREAM_SUCCESS:
+                // TODO
+                break;
+            case Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+                // TODO
+                break;
+            case Progress.PROCESS_INPUT_STREAM_SUCCESS:
+                // TODO
+                break;
+        }
+    }
+
+    @Override
+    public void finishDownloading() {
+        mDownloading = false;
+        if (mNetworkFragment != null) {
+            mNetworkFragment.cancelDownload();
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        startDownload();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
