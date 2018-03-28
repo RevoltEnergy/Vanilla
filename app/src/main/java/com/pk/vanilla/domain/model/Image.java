@@ -135,4 +135,133 @@ public class Image {
     public int getImageHeight() {
         return imageHeight;
     }
+
+    public static class Builder {
+        private int previewHeight;
+        private int likes;
+        private int favorites;
+        private String tags;
+        private int webformatHeight;
+        private long views;
+        private int webformatWidth;
+        private int previewWidth;
+        private int comments;
+        private long downloads;
+        private String pageURL;
+        private String previewURL;
+        private String webformatURL;
+        private int imageWidth;
+        private long userId;
+        private String user;
+        private ImageType type;
+        private long id;
+        private String userImageURL;
+        private int imageHeight;
+
+        public Builder setPreviewHeight(int previewHeight) {
+            this.previewHeight = previewHeight;
+            return this;
+        }
+
+        public Builder setLikes(int likes) {
+            this.likes = likes;
+            return this;
+        }
+
+        public Builder setFavorites(int favorites) {
+            this.favorites = favorites;
+            return this;
+        }
+
+        public Builder setTags(String tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public Builder setWebformatHeight(int webformatHeight) {
+            this.webformatHeight = webformatHeight;
+            return this;
+        }
+
+        public Builder setViews(long views) {
+            this.views = views;
+            return this;
+        }
+
+        public Builder setWebformatWidth(int webformatWidth) {
+            this.webformatWidth = webformatWidth;
+            return this;
+        }
+
+        public Builder setPreviewWidth(int previewWidth) {
+            this.previewWidth = previewWidth;
+            return this;
+        }
+
+        public Builder setComments(int comments) {
+            this.comments = comments;
+            return this;
+        }
+
+        public Builder setDownloads(long downloads) {
+            this.downloads = downloads;
+            return this;
+        }
+
+        public Builder setPageURL(String pageURL) {
+            this.pageURL = pageURL;
+            return this;
+        }
+
+        public Builder setPreviewURL(String previewURL) {
+            this.previewURL = previewURL;
+            return this;
+        }
+
+        public Builder setWebformatURL(String webformatURL) {
+            this.webformatURL = webformatURL;
+            return this;
+        }
+
+        public Builder setImageWidth(int imageWidth) {
+            this.imageWidth = imageWidth;
+            return this;
+        }
+
+        public Builder setUserId(long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder setUser(String user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder setType(ImageType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setUserImageURL(String userImageURL) {
+            this.userImageURL = userImageURL;
+            return this;
+        }
+
+        public Builder setImageHeight(int imageHeight) {
+            this.imageHeight = imageHeight;
+            return this;
+        }
+
+        public Image build() {
+            return new Image(previewHeight, likes, favorites, tags, webformatHeight, views,
+                    webformatWidth, previewWidth, comments, downloads, pageURL, previewURL,
+                    webformatURL, imageWidth, userId, user, type, id, userImageURL, imageHeight);
+        }
+    }
 }

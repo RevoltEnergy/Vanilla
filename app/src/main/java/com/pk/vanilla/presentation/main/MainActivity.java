@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity implements MainMvp.View {
         mainPresenter = new MainPresenter();
         mainPresenter.attachView(this);
         changeState(new ImageSearchFragment());
+        mainPresenter.getImageList("yellow flowers");
 
 //        RecyclerView recyclerView = findViewById(R.id.search_recycler_view);
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
