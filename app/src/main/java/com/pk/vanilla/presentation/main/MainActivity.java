@@ -9,12 +9,10 @@ import android.support.v7.widget.Toolbar;
 
 import com.pk.vanilla.R;
 import com.pk.vanilla.domain.model.Image;
-import com.pk.vanilla.presentation.network.DownloadCallback;
 import com.pk.vanilla.presentation.common.BaseActivity;
+import com.pk.vanilla.presentation.network.DownloadCallback;
 import com.pk.vanilla.presentation.network.NetworkFragment;
-import com.pk.vanilla.presentation.search.ImageAdapter;
 import com.pk.vanilla.presentation.search.ImageSearchFragment;
-import com.pk.vanilla.presentation.search.ImageSearchPresenter;
 import com.pk.vanilla.presentation.vanilla.VanillaFragment;
 import com.pk.vanilla.util.ApiUtil;
 
@@ -24,18 +22,12 @@ import java.util.Objects;
 public class MainActivity extends BaseActivity implements MainMvp.View, DownloadCallback, SearchView.OnQueryTextListener {
 
     private MainPresenter mainPresenter;
-    private ImageSearchPresenter imageSearchPresenter;
-    private ImageAdapter imageAdapter;
     private SearchView searchView;
 
     private ImageSearchFragment imageSearchFragment;
 
-    // Keep a reference to the NetworkFragment, which owns the AsyncTask object
-    // that is used to execute network ops.
     private NetworkFragment mNetworkFragment;
 
-    // Boolean telling us whether a download is in progress, so we don't trigger overlapping
-    // downloads with consecutive button clicks.
     private boolean mDownloading = false;
 
     @Override
@@ -68,9 +60,6 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
 
     @Override
     public void updateFromDownload(List<Image> images) {
-        // Update your UI here based on result of download.
-        // changeState(new ImageSearchFragment(List of images));
-
         imageSearchFragment.getImageSearchPresenter().setImageList(images);
         imageSearchFragment.updateView();
         changeState(imageSearchFragment);
