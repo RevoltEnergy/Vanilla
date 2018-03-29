@@ -8,8 +8,7 @@ import android.support.v7.widget.SearchView;
 
 import com.pk.vanilla.R;
 import com.pk.vanilla.domain.model.Image;
-import com.pk.vanilla.domain.service.DownloadCallback;
-import com.pk.vanilla.domain.service.DownloadType;
+import com.pk.vanilla.presentation.network.DownloadCallback;
 import com.pk.vanilla.presentation.common.BaseActivity;
 import com.pk.vanilla.presentation.network.NetworkFragment;
 import com.pk.vanilla.presentation.search.ImageAdapter;
@@ -57,7 +56,7 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
         if (!mDownloading && mNetworkFragment != null) {
             // Execute the async download.
             mNetworkFragment.setUrlString(url);
-            mNetworkFragment.startDownload(this, DownloadType.IMAGE_JSON);
+            mNetworkFragment.startDownload(this);
             mDownloading = true;
         }
     }

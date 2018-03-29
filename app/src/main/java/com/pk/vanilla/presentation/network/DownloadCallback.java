@@ -1,4 +1,4 @@
-package com.pk.vanilla.domain.service;
+package com.pk.vanilla.presentation.network;
 
 import android.net.NetworkInfo;
 

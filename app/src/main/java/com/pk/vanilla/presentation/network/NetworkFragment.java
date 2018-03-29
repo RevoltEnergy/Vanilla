@@ -1,8 +1,6 @@
 package com.pk.vanilla.presentation.network;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -13,8 +11,6 @@ import android.support.v4.app.FragmentManager;
 
 import com.pk.vanilla.domain.model.Image;
 import com.pk.vanilla.domain.model.ImageType;
-import com.pk.vanilla.domain.service.DownloadCallback;
-import com.pk.vanilla.domain.service.DownloadType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,7 +91,7 @@ public class NetworkFragment extends Fragment {
     /**
      * Start non-blocking execution of DownloadTask.
      */
-    public void startDownload(DownloadCallback downloadCallback, DownloadType downloadType) {
+    public void startDownload(DownloadCallback downloadCallback) {
         cancelDownload();
         mDownloadTask = new DownloadTask(downloadCallback);
         mDownloadTask.execute(mUrlString);

@@ -24,14 +24,12 @@ public class Image {
     private long id;
     private String userImageURL;
     private int imageHeight;
-    private Bitmap previewImage;
-    private Bitmap webformatImage;
 
     public Image(int previewHeight, int likes, int favorites, String tags,
                  int webformatHeight, long views, int webformatWidth, int previewWidth,
                  int comments, long downloads, String pageURL, String previewURL,
                  String webformatURL, int imageWidth, long userId, String user,
-                 ImageType type, long id, String userImageURL, int imageHeight, Bitmap previewImage, Bitmap webformatImage) {
+                 ImageType type, long id, String userImageURL, int imageHeight) {
 
         this.previewHeight = previewHeight;
         this.likes = likes;
@@ -53,8 +51,6 @@ public class Image {
         this.id = id;
         this.userImageURL = userImageURL;
         this.imageHeight = imageHeight;
-        this.previewImage = previewImage;
-        this.webformatImage = webformatImage;
     }
 
     public int getPreviewHeight() {
@@ -162,8 +158,6 @@ public class Image {
         private long id;
         private String userImageURL;
         private int imageHeight;
-        private Bitmap previewImage;
-        private Bitmap webformatImage;
 
         public Builder setPreviewHeight(int previewHeight) {
             this.previewHeight = previewHeight;
@@ -265,21 +259,10 @@ public class Image {
             return this;
         }
 
-        public Builder setPreviewImage(Bitmap previewImage) {
-            this.previewImage = previewImage;
-            return this;
-        }
-
-        public Builder setWebformatImage(Bitmap webformatImage) {
-            this.webformatImage = webformatImage;
-            return this;
-        }
-
         public Image build() {
             return new Image(previewHeight, likes, favorites, tags, webformatHeight, views,
                     webformatWidth, previewWidth, comments, downloads, pageURL, previewURL,
-                    webformatURL, imageWidth, userId, user, type, id, userImageURL, imageHeight,
-                    previewImage, webformatImage);
+                    webformatURL, imageWidth, userId, user, type, id, userImageURL, imageHeight);
         }
     }
 }
