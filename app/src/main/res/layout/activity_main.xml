@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusableInTouchMode="true">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:iconifiedByDefault="false" />
-
-    </android.support.v7.widget.Toolbar>
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -26,6 +7,8 @@
         android:orientation="vertical"
         tools:context="com.pk.vanilla.presentation.main.MainActivity">
 
+    <include layout="@layout/app_bar_layout"/>
+
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
@@ -33,5 +16,3 @@
 
         </FrameLayout>
     </LinearLayout>
-
-</android.support.design.widget.AppBarLayout>

@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 
 import com.pk.vanilla.R;
 import com.pk.vanilla.domain.model.Image;
@@ -16,6 +17,7 @@ import com.pk.vanilla.presentation.search.ImageSearchFragment;
 import com.pk.vanilla.presentation.search.ImageSearchPresenter;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends BaseActivity implements MainMvp.View, DownloadCallback, SearchView.OnQueryTextListener {
 
@@ -38,6 +40,9 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         mainPresenter = new MainPresenter();
         mainPresenter.attachView(this);
         searchView = findViewById(R.id.searchView);

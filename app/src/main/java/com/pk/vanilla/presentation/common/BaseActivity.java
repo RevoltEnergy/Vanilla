@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pk.vanilla.R;
-import com.pk.vanilla.presentation.details.ImageDetailFragment;
 import com.pk.vanilla.presentation.search.ImageSearchFragment;
 
 import java.util.List;
@@ -26,10 +25,10 @@ public class BaseActivity extends AppCompatActivity implements StateChanger {
     @Override
     public void onBackPressed() {
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        if (fragmentList.size() > 1) {
+        if (fragmentList.size() > 2) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.remove(fragmentList.get(fragmentList.size() - 1));
-            changeState(fragmentList.get(0));
+            changeState(getSupportFragmentManager().findFragmentByTag(ImageSearchFragment.class.getSimpleName()));
             transaction.commit();
         } else {
             if (doubleBackToExitPressedOnce) {
@@ -72,7 +71,7 @@ public class BaseActivity extends AppCompatActivity implements StateChanger {
     @Override
     public void changeState(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
+        transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }
 }
