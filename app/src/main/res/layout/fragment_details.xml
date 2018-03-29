@@ -13,7 +13,7 @@
         android:layout_margin="5dp">
 
         <RelativeLayout
-            android:id="@+id/wrapper"
+            android:id="@+id/wrapperDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -39,7 +39,7 @@
             android:id="@+id/imageDetailsText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/wrapper"
+            android:layout_below="@id/wrapperDetails"
             android:layout_margin="5dp"
             android:padding="5dp"
             android:background="@color/cardview_light_background"/>
