@@ -43,6 +43,10 @@ public class NetworkFragment extends Fragment {
     private DownloadTask mDownloadTask;
     private String mUrlString;
 
+    public void setUrlString(String mUrlString) {
+        this.mUrlString = mUrlString;
+    }
+
     /**
      * Static initializer for NetworkFragment that sets the URL of the host it will be downloading
      * from.
@@ -176,11 +180,10 @@ public class NetworkFragment extends Fragment {
                     } else {
                         return new Result<>(downloadBitmap(url));
                     }
-                } catch(Exception e) {
-                    result = new Result(e);
+                } catch(Exception ignored) {
                 }
             }
-            return result;
+            return null;
         }
 
         /**

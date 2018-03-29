@@ -4,29 +4,28 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.widget.Toast;
 
 import com.pk.vanilla.R;
 import com.pk.vanilla.domain.model.Image;
 import com.pk.vanilla.domain.service.DownloadCallback;
 import com.pk.vanilla.domain.service.DownloadType;
 import com.pk.vanilla.presentation.common.BaseActivity;
-import com.pk.vanilla.presentation.details.ImageDetailFragment;
 import com.pk.vanilla.presentation.network.NetworkFragment;
 import com.pk.vanilla.presentation.search.ImageAdapter;
-import com.pk.vanilla.presentation.search.ImageClickListener;
 import com.pk.vanilla.presentation.search.ImageSearchFragment;
+import com.pk.vanilla.presentation.search.ImageSearchPresenter;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainMvp.View, DownloadCallback<List<Image>>, SearchView.OnQueryTextListener {
 
     private MainPresenter mainPresenter;
+    private ImageSearchPresenter imageSearchPresenter;
     private ImageAdapter imageAdapter;
+
+    private ImageSearchFragment imageSearchFragment;
 
     // Keep a reference to the NetworkFragment, which owns the AsyncTask object
     // that is used to execute network ops.
@@ -47,14 +46,16 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
         searchView.setOnQueryTextListener(this);
         searchView.setIconified(false);
         searchView.setQueryHint("Search images...");
-        changeState(new ImageSearchFragment());
-        mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "https://pixabay.com/api/?key=8499934-51ca6dfffe38c79d79c24afc0&q=yellow+flowers&image_type=photo&pretty=true");
+//        changeState(new ImageSearchFragment());
+        mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "");
+        imageSearchFragment = new ImageSearchFragment();
 //        mainPresenter.getImageList("yellow flowers");
     }
 
-    private void startDownload() {
+    private void startDownload(String url) {
         if (!mDownloading && mNetworkFragment != null) {
             // Execute the async download.
+            mNetworkFragment.setUrlString(url);
             mNetworkFragment.startDownload(this, DownloadType.IMAGE_JSON);
             mDownloading = true;
         }
@@ -65,7 +66,8 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
         // Update your UI here based on result of download.
         // changeState(new ImageSearchFragment(List of images));
 
-        System.out.println(images);
+        imageSearchFragment.getImageSearchPresenter().setImageList(images);
+        changeState(imageSearchFragment);
     }
 
     @Override
@@ -106,7 +108,8 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        startDownload();
+        String url = "https://pixabay.com/api/?key=8499934-51ca6dfffe38c79d79c24afc0&q=" + query.replaceAll(" ", "+") + "&image_type=photo";
+        startDownload(url);
         return false;
     }
 

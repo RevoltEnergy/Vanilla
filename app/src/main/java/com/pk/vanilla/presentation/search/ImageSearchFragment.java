@@ -16,9 +16,12 @@ import com.pk.vanilla.R;
 import com.pk.vanilla.domain.model.Image;
 import com.pk.vanilla.presentation.details.ImageDetailFragment;
 
+import java.util.Collections;
+import java.util.List;
+
 public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View, ImageClickListener {
 
-    private ImageSearchPresenter imageSearchPresenter;
+    private ImageSearchPresenter imageSearchPresenter = new ImageSearchPresenter();
     private ImageAdapter imageAdapter;
 
     @Nullable
@@ -30,14 +33,14 @@ public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        imageSearchPresenter = new ImageSearchPresenter();
         imageSearchPresenter.attachView(this);
 
         RecyclerView recyclerView = view.findViewById(R.id.search_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        imageAdapter = new ImageAdapter(imageSearchPresenter.getFakeData(), this);
+        List<Image> images = imageSearchPresenter.getImageList() == null ? Collections.emptyList() : imageSearchPresenter.getImageList();
+        imageAdapter = new ImageAdapter(images, this);
         recyclerView.setAdapter(imageAdapter);
     }
 
@@ -59,5 +62,13 @@ public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View
         } else {
             Toast.makeText(getContext(), "View is null", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public ImageSearchPresenter getImageSearchPresenter() {
+        return imageSearchPresenter;
+    }
+
+    public ImageAdapter getImageAdapter() {
+        return imageAdapter;
     }
 }
