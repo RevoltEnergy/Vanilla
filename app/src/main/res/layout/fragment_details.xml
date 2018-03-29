@@ -8,18 +8,27 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="5dip"
+        android:layout_margin="5dp">
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/imageDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
             android:contentDescription="TODO" />
 
         <TextView
-            android:id="@+id/imageDetails"
+            android:id="@+id/imageDetailsText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageDetails"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:background="@color/cardview_light_background"/>
     </RelativeLayout>
 
 </FrameLayout>

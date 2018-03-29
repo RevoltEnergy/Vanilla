@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ImageSearchMvp {
 
-    interface View {}
+    interface View {
+        void updateView();
+    }
 
     interface Presenter {
         void setImageList(List<Image> images);

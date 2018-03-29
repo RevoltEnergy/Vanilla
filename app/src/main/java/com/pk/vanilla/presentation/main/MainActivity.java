@@ -23,6 +23,7 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
     private MainPresenter mainPresenter;
     private ImageSearchPresenter imageSearchPresenter;
     private ImageAdapter imageAdapter;
+    private SearchView searchView;
 
     private ImageSearchFragment imageSearchFragment;
 
@@ -40,11 +41,12 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
         setContentView(R.layout.activity_main);
         mainPresenter = new MainPresenter();
         mainPresenter.attachView(this);
-        SearchView searchView = findViewById(R.id.searchView);
+        searchView = findViewById(R.id.searchView);
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
         searchView.setIconified(false);
         searchView.setQueryHint("Search images...");
+        searchView.clearFocus();
 //        changeState(new ImageSearchFragment());
         mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "");
         imageSearchFragment = new ImageSearchFragment();
@@ -66,6 +68,7 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
         // changeState(new ImageSearchFragment(List of images));
 
         imageSearchFragment.getImageSearchPresenter().setImageList(images);
+        imageSearchFragment.updateView();
         changeState(imageSearchFragment);
     }
 
@@ -107,6 +110,7 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        searchView.clearFocus();
         String url = "https://pixabay.com/api/?key=8499934-51ca6dfffe38c79d79c24afc0&q=" + query.replaceAll(" ", "+") + "&image_type=photo";
         startDownload(url);
         return false;

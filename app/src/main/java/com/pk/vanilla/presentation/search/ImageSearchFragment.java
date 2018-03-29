@@ -18,6 +18,7 @@ import com.pk.vanilla.presentation.details.ImageDetailFragment;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View, ImageClickListener {
 
@@ -47,12 +48,16 @@ public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View
     @Override
     public void openImageDetails(Image image) {
         if (getView() != null) {
+            Objects.requireNonNull(getActivity()).findViewById(R.id.searchView).clearFocus();
             FragmentTransaction transaction;
             if (getFragmentManager() != null) {
                 transaction = getFragmentManager().beginTransaction();
                 ImageDetailFragment detailFragment = new ImageDetailFragment();
                 Bundle args = new Bundle();
-                args.putString("URL", image.getPageURL());
+                args.putString("URL", image.getWebformatURL());
+                StringBuilder description = new StringBuilder();
+                description.append(image.getUser()).append(". ").append(image.getType()).append(". ").append(image.getTags());
+                args.putString("Description", description.toString());
                 detailFragment.setArguments(args);
                 transaction.add(R.id.container, detailFragment);
                 transaction.commit();
@@ -70,5 +75,13 @@ public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View
 
     public ImageAdapter getImageAdapter() {
         return imageAdapter;
+    }
+
+    @Override
+    public void updateView() {
+        if (imageAdapter != null && imageSearchPresenter != null) {
+            imageAdapter.setImages(imageSearchPresenter.getImageList());
+            imageAdapter.notifyDataSetChanged();
+        }
     }
 }

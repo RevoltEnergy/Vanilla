@@ -8,9 +8,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pk.vanilla.R;
+import com.pk.vanilla.util.NetworkBackgroundBitmapUtil;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class ImageDetailFragment extends Fragment {
 
@@ -22,14 +27,13 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TextView textView = view.findViewById(R.id.imageDetails);
+        TextView textView = view.findViewById(R.id.imageDetailsText);
+        ImageView imageView = view.findViewById(R.id.imageDetails);
         Bundle args = getArguments();
         if (args != null) {
-            textView.setText(args.getString("URL"));
-        } else {
-            textView.setText("NO SUCH ARGUMENT");
+            NetworkBackgroundBitmapUtil.downloadBitmap(args.getString("URL"), imageView);
+            textView.setText(args.getString("Description"));
         }
-        textView.setCompoundDrawables(null, null, null, null);
     }
 
     @Override
