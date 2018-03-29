@@ -54,7 +54,7 @@ public class ImageSearchFragment extends Fragment implements ImageSearchMvp.View
                 transaction = getFragmentManager().beginTransaction();
                 ImageDetailFragment detailFragment = new ImageDetailFragment();
                 Bundle args = new Bundle();
-                args.putString("URL", image.getWebformatURL());
+                args.putString("URL", image.getLargeImageURL());
                 StringBuilder description = new StringBuilder();
                 description.append(image.getUser()).append(". ").append(image.getType()).append(". ").append(image.getTags());
                 args.putString("Description", description.toString());

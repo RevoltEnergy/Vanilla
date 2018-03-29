@@ -1,6 +1,5 @@
 package com.pk.vanilla.domain.model;
 
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 public class Image {
@@ -23,13 +22,14 @@ public class Image {
     private ImageType type;
     private long id;
     private String userImageURL;
+    private String largeImageURL;
     private int imageHeight;
 
     public Image(int previewHeight, int likes, int favorites, String tags,
                  int webformatHeight, long views, int webformatWidth, int previewWidth,
                  int comments, long downloads, String pageURL, String previewURL,
                  String webformatURL, int imageWidth, long userId, String user,
-                 ImageType type, long id, String userImageURL, int imageHeight) {
+                 ImageType type, long id, String userImageURL, String largeImageURL, int imageHeight) {
 
         this.previewHeight = previewHeight;
         this.likes = likes;
@@ -50,6 +50,7 @@ public class Image {
         this.type = type;
         this.id = id;
         this.userImageURL = userImageURL;
+        this.largeImageURL = largeImageURL;
         this.imageHeight = imageHeight;
     }
 
@@ -133,6 +134,10 @@ public class Image {
         return userImageURL;
     }
 
+    public String getLargeImageURL() {
+        return largeImageURL;
+    }
+
     public int getImageHeight() {
         return imageHeight;
     }
@@ -157,6 +162,7 @@ public class Image {
         private ImageType type;
         private long id;
         private String userImageURL;
+        private String largeImageURL;
         private int imageHeight;
 
         public Builder setPreviewHeight(int previewHeight) {
@@ -254,6 +260,11 @@ public class Image {
             return this;
         }
 
+        public Builder setLargeImageURL(String largeImageURL) {
+            this.largeImageURL = largeImageURL;
+            return this;
+        }
+
         public Builder setImageHeight(int imageHeight) {
             this.imageHeight = imageHeight;
             return this;
@@ -262,7 +273,7 @@ public class Image {
         public Image build() {
             return new Image(previewHeight, likes, favorites, tags, webformatHeight, views,
                     webformatWidth, previewWidth, comments, downloads, pageURL, previewURL,
-                    webformatURL, imageWidth, userId, user, type, id, userImageURL, imageHeight);
+                    webformatURL, imageWidth, userId, user, type, id, userImageURL, largeImageURL, imageHeight);
         }
     }
 }

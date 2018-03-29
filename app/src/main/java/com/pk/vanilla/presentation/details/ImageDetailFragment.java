@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pk.vanilla.R;
@@ -29,9 +30,11 @@ public class ImageDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView textView = view.findViewById(R.id.imageDetailsText);
         ImageView imageView = view.findViewById(R.id.imageDetails);
+        ProgressBar spinner = view.findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
         Bundle args = getArguments();
         if (args != null) {
-            NetworkBackgroundBitmapUtil.downloadBitmap(args.getString("URL"), imageView);
+            NetworkBackgroundBitmapUtil.downloadBitmap(args.getString("URL"), imageView, spinner);
             textView.setText(args.getString("Description"));
         }
     }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +40,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         StringBuilder description = new StringBuilder();
         description.append(image.getUser()).append(". ").append(image.getType()).append(". ").append(image.getTags());
         holder.textView.setText(description.toString());
+        holder.spinner.setVisibility(View.VISIBLE);
 
-        NetworkBackgroundBitmapUtil.downloadBitmap(webformatURL, holder.imageView);
+        NetworkBackgroundBitmapUtil.downloadBitmap(webformatURL, holder.imageView, holder.spinner);
 
         holder.itemView.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Details", Toast.LENGTH_SHORT).show();
@@ -60,11 +62,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     class ImageViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         ImageView imageView;
+        ProgressBar spinner;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.imageDescription);
             imageView = itemView.findViewById(R.id.image);
+            spinner = itemView.findViewById(R.id.progressBar);
         }
     }
 }

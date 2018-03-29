@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class NetworkBackgroundBitmapUtil {
 
-    public static void downloadBitmap(String url, ImageView imageView) {
+    public static void downloadBitmap(String url, ImageView imageView, ProgressBar spinner) {
         new Thread() {
             @Override
             public void run() {
@@ -26,7 +28,10 @@ public class NetworkBackgroundBitmapUtil {
                 }
 
                 Bitmap finalBitmap = bitmap;
-                new Handler(Looper.getMainLooper()).post(() -> imageView.setImageBitmap(finalBitmap));
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    spinner.setVisibility(View.GONE);
+                    imageView.setImageBitmap(finalBitmap);
+                });
             }
         }.start();
     }

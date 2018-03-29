@@ -217,6 +217,7 @@ public class NetworkFragment extends Fragment {
                             .setPreviewURL(imageJson.getString("previewURL"))
                             .setWebformatURL(imageJson.getString("webformatURL"))
                             .setUserImageURL(imageJson.getString("userImageURL"))
+                            .setLargeImageURL(imageJson.getString("largeImageURL"))
                             .setUser(imageJson.getString("user"))
                             .build();
                     images.add(image);
