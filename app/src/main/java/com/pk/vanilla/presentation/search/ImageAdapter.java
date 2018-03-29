@@ -42,23 +42,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
         NetworkBackgroundBitmapUtil.downloadBitmap(webformatURL, holder.imageView);
 
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = NetworkBackgroundBitmapUtil.downloadBitmap(new URL(webformatURL));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                Bitmap finalBitmap = bitmap;
-//                new Handler(Looper.getMainLooper()).post(() -> holder.imageView.setImageBitmap(finalBitmap));
-//            }
-//        }.start();
-
         holder.itemView.setOnClickListener(view -> {
-            Toast.makeText(view.getContext(), "pressed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "Details", Toast.LENGTH_SHORT).show();
             imageClickListener.openImageDetails(images.get(position));
         });
     }
