@@ -62,7 +62,6 @@ public class NetworkFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        // Host Activity will handle callbacks from task.
         mCallback = (DownloadCallback) context;
     }
 
@@ -74,7 +73,6 @@ public class NetworkFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        // Cancel task when Fragment is destroyed.
         cancelDownload();
         super.onDestroy();
     }
@@ -119,7 +117,6 @@ public class NetworkFragment extends Fragment {
                 if (networkInfo == null || !networkInfo.isConnected() ||
                         (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
                                 && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
-                    // If no connectivity, cancel task and update Callback with null data.
                     mCallback.updateFromDownload(null);
                     cancel(true);
                 }
