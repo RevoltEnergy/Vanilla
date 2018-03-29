@@ -26,7 +26,7 @@ import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> implements DownloadCallback<Bitmap> {
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
     private List<Image> images;
     private ImageClickListener imageClickListener;
@@ -75,26 +75,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @Override
     public int getItemCount() {
         return images.size();
-    }
-
-    @Override
-    public void updateFromDownload(Bitmap result) {
-
-    }
-
-    @Override
-    public NetworkInfo getActiveNetworkInfo() {
-        return null;
-    }
-
-    @Override
-    public void onProgressUpdate(int progressCode, int percentComplete) {
-
-    }
-
-    @Override
-    public void finishDownloading() {
-
     }
 
     class ImageViewHolder extends RecyclerView.ViewHolder {

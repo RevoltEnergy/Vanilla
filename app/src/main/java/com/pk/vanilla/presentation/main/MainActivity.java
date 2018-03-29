@@ -16,10 +16,9 @@ import com.pk.vanilla.presentation.search.ImageAdapter;
 import com.pk.vanilla.presentation.search.ImageSearchFragment;
 import com.pk.vanilla.presentation.search.ImageSearchPresenter;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements MainMvp.View, DownloadCallback<List<Image>>, SearchView.OnQueryTextListener {
+public class MainActivity extends BaseActivity implements MainMvp.View, DownloadCallback, SearchView.OnQueryTextListener {
 
     private MainPresenter mainPresenter;
     private ImageSearchPresenter imageSearchPresenter;

@@ -97,7 +97,7 @@ public class NetworkFragment extends Fragment {
      */
     public void startDownload(DownloadCallback downloadCallback, DownloadType downloadType) {
         cancelDownload();
-        mDownloadTask = new DownloadTask(downloadCallback, downloadType);
+        mDownloadTask = new DownloadTask(downloadCallback);
         mDownloadTask.execute(mUrlString);
     }
 
@@ -116,19 +116,13 @@ public class NetworkFragment extends Fragment {
     private static class DownloadTask extends AsyncTask<String, Integer, DownloadTask.Result> {
 
         private DownloadCallback mCallback;
-        private DownloadType mDownloadType;
 
-        DownloadTask(DownloadCallback callback, DownloadType downloadType) {
+        DownloadTask(DownloadCallback callback) {
             setCallback(callback);
-            setType(downloadType);
         }
 
         void setCallback(DownloadCallback callback) {
             mCallback = callback;
-        }
-
-        void setType(DownloadType downloadType) {
-            mDownloadType = downloadType;
         }
 
         /**
@@ -136,15 +130,12 @@ public class NetworkFragment extends Fragment {
          * task has completed, either the result value or exception can be a non-null value.
          * This allows you to pass exceptions to the UI thread that were thrown during doInBackground().
          */
-        class Result<T> {
-            public T mResultValue;
-            public Exception mException;
-            public Result(T resultValue) {
-                mResultValue = resultValue;
-            }
+        class Result {
+            List<Image> mResultValue;
+            Exception mException;
 
-            public Result(Exception exception) {
-                mException = exception;
+            Result(List<Image> resultValue) {
+                mResultValue = resultValue;
             }
         }
 
@@ -170,17 +161,12 @@ public class NetworkFragment extends Fragment {
          */
         @Override
         protected DownloadTask.Result doInBackground(String... urls) {
-            Result result = null;
             if (!isCancelled() && urls != null && urls.length > 0) {
                 String urlString = urls[0];
                 try {
                     URL url = new URL(urlString);
-                    if (mDownloadType.equals(DownloadType.IMAGE_JSON)) {
-                        return new Result<>(mapResult(downloadUrl(url)));
-                    } else {
-                        return new Result<>(downloadBitmap(url));
-                    }
-                } catch(Exception ignored) {
+                    return new Result(mapResult(downloadUrl(url)));
+                } catch (Exception ignored) {
                 }
             }
             return null;
@@ -298,47 +284,6 @@ public class NetworkFragment extends Fragment {
                 return ImageType.VECTOR;
             }
             return ImageType.PHOTO;
-        }
-
-        private Bitmap downloadBitmap(URL url) throws IOException {
-            InputStream stream = null;
-            HttpsURLConnection connection = null;
-            Bitmap result = null;
-            try {
-                connection = (HttpsURLConnection) url.openConnection();
-                // Timeout for reading InputStream arbitrarily set to 3000ms.
-                connection.setReadTimeout(3000);
-                // Timeout for connection.connect() arbitrarily set to 3000ms.
-                connection.setConnectTimeout(3000);
-                // For this use case, set HTTP method to GET.
-                connection.setRequestMethod("GET");
-                // Already true by default but setting just in case; needs to be true since this request
-                // is carrying an input (response) body.
-                connection.setDoInput(true);
-                // Open communications link (network traffic occurs here).
-                connection.connect();
-                publishProgress(DownloadCallback.Progress.CONNECT_SUCCESS);
-                int responseCode = connection.getResponseCode();
-                if (responseCode != HttpsURLConnection.HTTP_OK) {
-                    throw new IOException("HTTP error code: " + responseCode);
-                }
-                // Retrieve the response body as an InputStream.
-                stream = connection.getInputStream();
-                publishProgress(DownloadCallback.Progress.GET_INPUT_STREAM_SUCCESS, 0);
-                if (stream != null) {
-                    // Converts Stream to String with max length of 500.
-                    result = BitmapFactory.decodeStream(stream);
-                }
-            } finally {
-                // Close Stream and disconnect HTTPS connection.
-                if (stream != null) {
-                    stream.close();
-                }
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
-            return result;
         }
     }
 }
