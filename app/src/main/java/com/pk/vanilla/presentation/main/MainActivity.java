@@ -15,6 +15,8 @@ import com.pk.vanilla.presentation.network.NetworkFragment;
 import com.pk.vanilla.presentation.search.ImageAdapter;
 import com.pk.vanilla.presentation.search.ImageSearchFragment;
 import com.pk.vanilla.presentation.search.ImageSearchPresenter;
+import com.pk.vanilla.presentation.vanilla.VanillaFragment;
+import com.pk.vanilla.util.ApiUtil;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,15 +53,13 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
         searchView.setIconified(false);
         searchView.setQueryHint("Search images...");
         searchView.clearFocus();
-//        changeState(new ImageSearchFragment());
+        changeState(new VanillaFragment());
         mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "");
         imageSearchFragment = new ImageSearchFragment();
-//        mainPresenter.getImageList("yellow flowers");
     }
 
     private void startDownload(String url) {
         if (!mDownloading && mNetworkFragment != null) {
-            // Execute the async download.
             mNetworkFragment.setUrlString(url);
             mNetworkFragment.startDownload(this);
             mDownloading = true;
@@ -85,21 +85,15 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
     @Override
     public void onProgressUpdate(int progressCode, int percentComplete) {
         switch (progressCode) {
-            // You can add UI behavior for progress updates here.
             case Progress.ERROR:
-                // TODO
                 break;
             case Progress.CONNECT_SUCCESS:
-                // TODO
                 break;
             case Progress.GET_INPUT_STREAM_SUCCESS:
-                // TODO
                 break;
             case Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
-                // TODO
                 break;
             case Progress.PROCESS_INPUT_STREAM_SUCCESS:
-                // TODO
                 break;
         }
     }
@@ -115,8 +109,13 @@ public class MainActivity extends BaseActivity implements MainMvp.View, Download
     @Override
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
-        String url = "https://pixabay.com/api/?key=8499934-51ca6dfffe38c79d79c24afc0&q=" + query.replaceAll(" ", "+") + "&image_type=photo";
-        startDownload(url);
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append(ApiUtil.QUERY_PREFIX)
+                .append(ApiUtil.API_KEY)
+                .append(ApiUtil.QUERY_PARAMETER)
+                .append(query.replaceAll(" ", "+"))
+                .append(ApiUtil.QUERY_SUFIX);
+        startDownload(queryBuilder.toString());
         return false;
     }
 
